@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 export default function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -13,6 +14,9 @@ export default function Navbar() {
                     </li>
                     <li className='nav-item'>
                         <a className='nav-link' href='/app'>Gifts</a>
+                    </li>
+                    <li className='nav-item'>
+                        <a className='nav-link' href='/app/search'>Search</a>
                     </li>
                 </ul>
             </div>

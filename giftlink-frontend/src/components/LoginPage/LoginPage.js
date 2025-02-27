@@ -1,9 +1,9 @@
 import React, {use, useState} from 'react'; 
-import './loginPage.css';
+import './LoginPage.css';
 
 function LoginPage() {
-    const {email, setEmail} = useState('');
-    const {password, setPassword} = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     
     const handleLogin = () => {
         console.log('Inside handleLogin');
