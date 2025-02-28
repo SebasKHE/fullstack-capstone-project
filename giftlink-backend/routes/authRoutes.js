@@ -2,14 +2,14 @@ const express = require('express');
 const app = express();
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {body, validateResult} = require('express-validator');
+const {body, validationResult} = require('express-validator');
 const connectToDatabase = require('../models/db');
 const router = express.Router();
 const dotenv = require('dotenv');
 const pino = require('pino');
 
 
-const logger = pino;
+const logger = pino();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -33,7 +33,7 @@ router.post('/login', async(req, res) =>{
                 user : { id: theUser._id.toString(),
                 }
             };
-            const authtoken = jwt.sign(user._id, JWT_SECRET);
+            const authtoken = jwt.sign(payload, JWT_SECRET);
             logger.info('User logged in succesfully');
             return res.status(200).json({authtoken, userName, userEmail});
         } else {
@@ -77,7 +77,7 @@ router.post('/register', async (req, res) => {
         //Create JWT
         const authtoken = jwt.sign(payload, JWT_SECRET);
         logger.info('User registered successfully');
-        res.json({ authtoken,email });
+        res.json({ authtoken, email });
     } catch (e) {
         logger.error(e);
         return res.status(500).send('Internal server error');
@@ -85,7 +85,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.put('/update', async (req, res) => {
-    const errors = validateResult(req);
+    const errors = validationResult(req);
     if(!errors.isEmpty()) {
         logger.error('Validation errors in update request', errors.array());
         return res.status(400).json({errors: errors.array})

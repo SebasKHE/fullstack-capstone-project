@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react'; 
 import './LoginPage.css';
 import {urlConfig} from '../../config';
-import {useAppConext} from '../../context/AuthContext';
+import {useAppContext} from '../../context/AuthContext';
 import {useNavigate} from 'react-router-dom';
-import { post } from '../../../../giftlink-backend/routes/authRoutes';
-import logger from '../../../../giftlink-backend/logger';
+//import logger from "logger";
+
+
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ function LoginPage() {
     const [incorrect, setIncorrect] = useState('');
     const navigate = useNavigate();
     const bearerToken = sessionStorage.getItem('bearer-token');
-    const {setIsLoggedIn} = useAppConext();
+    const {setIsLoggedIn} = useAppContext();
 
     useEffect(() => {
         if (sessionStorage.getItem('auth-toekn')) {
@@ -53,7 +54,7 @@ function LoginPage() {
                 }, 2000);
             }
         } catch (e) {
-            logger.error('Incorrect passpo')
+           // logger.error('Incorrect passpo')
         }
     }
 
