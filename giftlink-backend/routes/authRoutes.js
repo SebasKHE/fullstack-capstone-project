@@ -84,7 +84,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-router.update('/update', async (req, res) => {
+router.put('/update', async (req, res) => {
     const errors = validateResult(req);
     if(!errors.isEmpty()) {
         logger.error('Validation errors in update request', errors.array());
