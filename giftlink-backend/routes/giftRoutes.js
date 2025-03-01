@@ -1,3 +1,5 @@
+/*jshint esversion: 8 */
+
 const connectToDatabase = require('../models/db');
 const express = require('express');
 const router = express.Router();
