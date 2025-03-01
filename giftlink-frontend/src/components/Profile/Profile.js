@@ -82,7 +82,7 @@ const handleSubmit = async (e) => {
       //Step 1: Task 4
       setUserName(updatedDetails.name);
       //Step 1: Task 5
-      sessionStorage.setItem('name'. updatedDetails.name);
+      sessionStorage.setItem('name',updatedDetails.name);
       setUserDetails(updatedDetails);
       setEditMode(false);
       // Display success message to the user
