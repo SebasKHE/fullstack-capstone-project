@@ -99,7 +99,7 @@ router.put('/update', async (req, res) => {
         }
 
         const db = await connectToDatabase();
-        const collection = db.collection(users);
+        const collection = db.collection('users');
         const user = await collection.findOne({email});
         
         if (!user) {
