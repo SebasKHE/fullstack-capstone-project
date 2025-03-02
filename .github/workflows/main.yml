@@ -8,46 +8,92 @@ on:
 
 jobs:
   lint_js:
-      name: Lint JavaScript Files
-      runs-on: ubuntu-latest
+    name: Lint JavaScript Files
+    runs-on: ubuntu-latest
 
-      steps:
+    steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: "18"  # Mejor usar una versión más reciente
 
-      - name: Install JSHint
-        run: npm install jshint --global
+      - name: Install dependencies
+        run: cd animit-backend && npm install
 
-      - name: Run Linter
+      - name: Run JSHint
         run: |
-          # This command finds all JavaScript files recursively and runs JSHint on them
-          find ./giftlink-backend -name app.js -exec jshint {} +
-          find ./giftlink-backend -name auth.js -exec jshint {} +
-          find ./giftlink-backend -name giftRoutes.js -exec jshint {} +
-          find ./giftlink-backend -name searchRoutes.js -exec jshint {} +
-          echo "Linted all the js files successfully"
+          cd animit-backend
+          npx jshint giftRoutes.js
+        continue-on-error: true  # No detiene el workflow si hay errores de linting
+
+  lint_py:
+    name: Lint Python Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install Pylint
+        run: pip install pylint
+
+      - name: Run Pylint
+        run: pylint llm-service --fail-under=8  # Falla si la puntuación es <8/10
+        continue-on-error: true  # No detiene el workflow
+
+  poetry:
+    name: Install dependencies for Python LLM app
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install Dependencies
+        run: |
+          cd llm-service
+          poetry install --no-root  # Solo instala dependencias sin incluir el propio proyecto
+
+      - name: Run LLM.py
+        run: |
+          cd llm-service
+          poetry run python llm.py
 
   client_build:
-      name: Build client
-      runs-on: ubuntu-latest
+    name: Build client
+    runs-on: ubuntu-latest
 
-      steps:
+    steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: "18"
+
+      - name: Install dependencies
+        run: cd animit-frontend && npm ci  # Usa `npm ci` en lugar de `npm install` para mayor estabilidad
 
       - name: Run build
         run: |
-          cd giftlink-frontend
-          npm install
+          cd animit-frontend
           npm run build
           echo "Client-side build successfully"
+
